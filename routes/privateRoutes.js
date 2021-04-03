@@ -13,7 +13,7 @@ module.exports = function(req,res,next){
         
     }catch(err){
         console.log(err)
-        res.status(200).send('Admin Page');
+        res.status(400).send('Invalid Token');
     }
 }
  
