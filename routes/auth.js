@@ -4,15 +4,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-
-
 //Api Routes Configs
 router.post('/register', async (req,res)=> {
 
 
    // username Verfification
    const usernameExist = await User.findOne({username:req.body.username});
-   if(usernameExist) return res.status(400).send('Username já existe')
+   if(usernameExist) return res.status(400).send('Username existente')
 
    //Hash Passwords
    var salt = bcrypt.genSaltSync(10)
@@ -36,14 +34,17 @@ router.post('/login', async (req,res)=>{
 
    //check if username exist
    const user = await User.findOne({username:req.body.username});
-   if(!user) return res.status(400).send('Username não existe')
+   if(!user) return res.status(400).send('Campo Invalido')
+   
    //check if password correct
+
    const validPass = await bcrypt.compare(req.body.password, user.password);
-   if(!validPass) return res.status(400).send('Password Inválida');
+   if(!validPass) return res.status(400).send('Campo Invalido');
 
    //Create jwt
-   const token = jwt.sign({username: user.username}, process.env.TOKEN_PASS)
-   res.header('auth-token',token).send(token);
+
+   const token = jwt.sign({username: user.username, permissions: user.permissions}, process.env.TOKEN_PASS, {expiresIn: process.env.TOKEN_EXPIRES_IN })
+   res.header('auth-token',token).json({auth:true, token});
 
    //res.redirect('/api/admin/home');
    

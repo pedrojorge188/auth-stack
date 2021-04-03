@@ -6,10 +6,14 @@ module.exports = function(req,res,next){
 
     if(!token) return res.status(401).send('Voçê não tem acesso a esta página');
     try{
-
+        
         const verificar = jwt.verify(token, process.env.TOKEN_PASS);
         req.user = verificar;
-        next();;
+        if(req.user['permissions'] == false){
+            res.status(401).send('Apenas Administradores podem aceder a esta página');
+        }else{
+          next();
+        }
         
     }catch(err){
         console.log(err)
