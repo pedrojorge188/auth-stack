@@ -15,12 +15,14 @@ mongoose.connect(process.env.DB_CONNECT,{useNewUrlParser: true, useUnifiedTopolo
 // Routes ..
 const authRoute = require('./routes/auth');
 const adminRoute = require('./routes/admin');
+const HomeRoutes = require('./routes/home');
 
 //Middlewares
 app.use(express.json());
 
 app.use('/api/user', authRoute);
 app.use('/api/admin', adminRoute);
+app.use('/', HomeRoutes);
 
 
 

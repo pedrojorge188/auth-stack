@@ -4,20 +4,18 @@ module.exports = function(req,res,next){
 
     const token = req.header('auth-token');
 
-    if(!token) return res.status(401).send('Voçê não tem acesso a esta página');
+    if(!token) return res.status(401).send('Voçê terá que realizar Login');
     try{
         
         const verificar = jwt.verify(token, process.env.TOKEN_PASS);
         req.user = verificar;
-        if(req.user['permissions'] == false){
-            res.status(401).send('Apenas Administradores podem aceder a esta página');
-        }else{
-          next();
-        }
-        
+        res.status(200);
+        console.log("username:"+req.user['username'])
+        next();
+    
+
     }catch(err){
         console.log(err)
         res.status(400).send('Invalid Token');
     }
 }
- 

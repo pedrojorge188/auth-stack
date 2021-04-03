@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const verify = require('./privateRoutes');
+const verifyAdmin = require('./privateRouteAdmin');
 
 
 
-router.get('/home', verify ,(req,res) => {
+router.get('/home', verifyAdmin ,(req,res) => {
     res.send('Admin Page');
 });
 
